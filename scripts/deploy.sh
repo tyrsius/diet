@@ -1,11 +1,14 @@
 #!/bin/bash
 
-# npm run build
+
+pushd src/server
+npm run build
+popd
 
 pushd infrastructure
 terraform init
 cp ../.env ./terraform.tfvars
-terraform apply
+terraform apply -auto-approve 
 rm ./terraform.tfvars
 popd
 

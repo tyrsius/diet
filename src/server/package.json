@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "lambda-zipper build -f airtable diet api.js config.js context.js -o ../../build/server.zip"
+    "build": "lambda-zipper build -f airtable diet api.js config.js context.js -r -o ../../build/server.zip"
   },
   "author": "",
   "license": "ISC",
@@ -16,6 +16,6 @@
   },
   "devDependencies": {
     "dotenv": "^7.0.0",
-    "lambda-zipper": "^0.3.0"
+    "lambda-zipper": "^0.4.1"
   }
 }

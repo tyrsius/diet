@@ -2,7 +2,7 @@
 
 module.exports = {
   routes: {
-    getAll: async (event, { dietStore }) {
+    getAll: async (event, { dietStore }) => {
       return dietStore.getAll()
     }
   }

@@ -2,6 +2,8 @@
 
 require('dotenv').config()
 const { wrapContext } = require('./context')
+const { routes: diets } = require('./diet/routes')
+
 const context = wrapContext()
 
 async function main() {

@@ -5,6 +5,8 @@ const { wrapContext } = require('./context')
 
 const { routes: diets } = require('./diet/routes')
 
+exports.handler = handler
+
 const router = Router({
   logger: console,
   inluceErrorStack: process.env.stage !== 'prod'

@@ -17,8 +17,6 @@ function wrapContext(lambdaContext = {}, event) {
 
   lazy(context, 'dietStore', () => {
     let { DietStore } = require('./diet/store')
-
-    console.log('config', config)
     return new DietStore({
       airtable: context.airtable,
       baseId: config.airtable.dietBaseId,
