@@ -21,9 +21,10 @@ locals {
   app_namespace     = "diet"
   api_lambda_file   = "../build/server.zip"
   api_lamba_name    = "${local.app_namespace}-api"
-  domain            = "diet.kye.dev"
-  cloufront_domains = ["${local.domain}"]
-  api_stage         = "${terraform.workspace}"
+  site_domain            = "diet.kye.dev"
+  api_domain            = "diet-api.kye.dev"
+  cloufront_domains = ["${local.site_domain}"]
+  api_stage         = "prod"
   api_gateway_name  = "${local.app_namespace}-api"
   default_tags = {
     Namespace = "${local.app_namespace}"

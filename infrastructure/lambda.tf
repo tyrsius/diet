@@ -12,7 +12,6 @@ resource "aws_lambda_function" "api" {
 
   environment {
     variables {
-      stage                 = "${terraform.workspace}"
       AIRTABLE_KEY          = "${var.AIRTABLE_KEY}"
       AIRTABLE_DIET_BASE_ID = "${var.AIRTABLE_DIET_BASE_ID}"
     }
@@ -21,7 +20,7 @@ resource "aws_lambda_function" "api" {
 
 #Role the lambda will be executed with
 resource "aws_iam_role" "lambda_execution_role" {
-  name = "${local.app_namespace}_${terraform.workspace}_LambdaRole"
+  name = "${local.app_namespace}_LambdaRole"
 
   assume_role_policy = <<EOF
 {

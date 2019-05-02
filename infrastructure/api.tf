@@ -8,9 +8,9 @@ resource "aws_api_gateway_rest_api" "api" {
   name               = "${local.api_gateway_name}"
   binary_media_types = ["application/octet-stream"]
 
-  endpoint_configuration {
-    types = ["REGIONAL"]
-  }
+  # endpoint_configuration {
+  #   types = ["REGIONAL"]
+  # }
 }
 
 # V1 root
@@ -71,10 +71,13 @@ resource "aws_api_gateway_deployment" "apig_deployment" {
 
   rest_api_id       = "${aws_api_gateway_rest_api.api.id}"
   stage_name        = "${local.api_stage}"
-  stage_description = "${base64sha256(file(var.apiGatewayTerraformFile))}" #This is important, it will cause the stage to get deployed if this file is changed.  If it is not present the stage will not get updated even on dependent apig resource changes.
+  # This is important, it will cause the stage to get deployed if this file is changed.
+  # If it is not present the stage will not get updated even on dependent apig resource changes.
+  stage_description = "${base64sha256(file(var.apiGatewayTerraformFile))}"
 
   variables {
     "stage" = "${local.api_stage}"
+    "depends" = "${aws_api_gateway_integration.proxy_all_integration.id}"
   }
 
   lifecycle {
@@ -93,20 +96,16 @@ resource "aws_api_gateway_deployment" "apig_deployment" {
 #   }
 # }
 
-# resource "aws_api_gateway_base_path_mapping" "test" {
-#   depends_on = [
-#     "aws_api_gateway_deployment.apig_deployment",
-#   ]
+resource "aws_api_gateway_base_path_mapping" "api" {
+  depends_on = [
+    "aws_api_gateway_deployment.apig_deployment",
+  ]
 
-#   api_id      = "${aws_api_gateway_rest_api.api.id}"
-#   domain_name = "${aws_api_gateway_domain_name.api_domain.domain_name}"
-#   stage_name  = "${aws_api_gateway_deployment.apig_deployment.stage_name}"
-#   base_path   = "${terraform.workspace}"
-# }
-
-# output "domain" {
-#   value = "https://${aws_api_gateway_domain_name.api_domain.domain_name}"
-# }
+  api_id      = "${aws_api_gateway_rest_api.api.id}"
+  domain_name = "${aws_api_gateway_domain_name.api_domain.domain_name}"
+  stage_name  = "${aws_api_gateway_deployment.apig_deployment.stage_name}"
+  base_path   = ""
+}
 
 #Display the invoke url in the terminal
 output "display_invoke_url" {

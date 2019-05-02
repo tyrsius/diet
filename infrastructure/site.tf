@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "site" {
-  bucket = "${local.domain}"
+  bucket = "${local.site_domain}"
   acl    = "private"
 
   policy = <<EOF
@@ -13,7 +13,7 @@ resource "aws_s3_bucket" "site" {
             "s3:GetObject"
           ],
           "Effect": "Allow",
-          "Resource": "arn:aws:s3:::${local.domain}/*",
+          "Resource": "arn:aws:s3:::${local.site_domain}/*",
           "Principal": "*"
         }
       ]
@@ -36,7 +36,7 @@ resource "aws_cloudfront_distribution" "site" {
 
     domain_name = "${aws_s3_bucket.site.website_endpoint}"
 
-    # domain_name = "${local.domain}.s3.amazonaws.com"
+    # domain_name = "${local.site_domain}.s3.amazonaws.com"
 
     custom_origin_config {
       origin_protocol_policy = "http-only"
@@ -110,6 +110,8 @@ resource "aws_cloudfront_distribution" "site" {
     minimum_protocol_version = "TLSv1"
   }
 
+  
+
   aliases = ["${local.cloufront_domains}"]
 
   restrictions = {
@@ -117,4 +119,10 @@ resource "aws_cloudfront_distribution" "site" {
       restriction_type = "none"
     }
   }
+}
+
+locals {
+  api_domain_host = "${replace(
+    replace(aws_api_gateway_deployment.apig_deployment.invoke_url, "/${local.api_stage}", ""),
+    "https://", "")}"
 }
