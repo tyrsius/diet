@@ -14,6 +14,7 @@ class DietStore extends BaseStore {
     return {
       id: base.id,
       date: new Date(base.Date),
+      fat: base.Fat,
       weight: base.Weight,
       protien: base.Protien,
       carbs: base.Carbs,
@@ -25,6 +26,7 @@ class DietStore extends BaseStore {
     return super.toDb({
       Date: dayjs(record.date).format('YYYY-MM-DD'),
       Weight: record.weight,
+      Fat: record.fat,
       Protien: record.protien,
       Carbs: record.Carbs,
       Calories: record.calories
