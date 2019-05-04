@@ -1,21 +1,22 @@
-/* .diet-wrapper {
+.diet-wrapper {
   height: 100%;
   width: 100%;
   display: grid;
   grid-gap: 10px;
   grid-row-gap: 40px;
   grid-template-columns: repeat(auto-fit, minmax(800px, 1fr));
+  margin-top: 2rem;
 }
 
 .chart {
   margin: auto;
   height: 100%;
   width: 100%;
-  max-width: 800px;
-  max-height: 800px;
-} */
+  /* max-width: 800px;
+  max-height: 800px; */
+}
 
-.diet-wrapper {
+/* .diet-wrapper {
   height: 100%;
   width: 100%;
 }
@@ -24,8 +25,6 @@
   margin: auto;
   height: 100%;
   width: 80%;
-  max-width: 800px;
-  max-height: 800px;
   margin-bottom: 5rem;
   margin-top: 5rem;
-}
+} */

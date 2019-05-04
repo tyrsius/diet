@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { getDietLogs } from './store'
-import Spinner from 'react-md-spinner'
+import { PageSpinner } from '../components/index.js'
 import RedBox from 'redbox-react'
 
 import DietChart from './DietChart'
@@ -15,7 +15,7 @@ export default function DietPage() {
       .catch(setLogs)
   }, [query])
 
-  if (!logs) return <Spinner />
+  if (!logs) return <PageSpinner />
   if (logs && logs.message) return <RedBox error={logs} />
   return <DietChart logs={logs} />
 }
