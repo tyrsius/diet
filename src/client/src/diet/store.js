@@ -13,6 +13,7 @@ export const getDietLogs = async () => {
 function fromApi(item) {
   return {
     ...item,
-    date: new Date(item.date)
+    // The server time is UTC, we want to sidestep timezone issues
+    date: new Date(item.date.replace(/-/g, '/').replace(/T.+/, ''))
   }
 }

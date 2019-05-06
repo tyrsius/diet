@@ -2,7 +2,9 @@ import React from 'react'
 import { map, evolve, sortBy, prop, pipe } from 'ramda'
 import dayjs from 'dayjs'
 import {
+  AreaChart,
   LineChart,
+  Area,
   Line,
   XAxis,
   YAxis,
@@ -15,14 +17,11 @@ import './dietChart.css'
 
 const chartTransform = pipe(
   sortBy(prop('date')),
-  map(evolve({ date: d => dayjs(d).format('DD/MM') }))
+  map(evolve({ date: d => dayjs(d).format('MM/DD') }))
 )
-const chartMarginStyle = {
-  top: 5,
-  right: 30,
-  left: 20,
-  bottom: 5
-}
+
+const chartMargin = { top: 5, right: 0, bottom: 5, left: 0 }
+const xTickMargin = 10
 
 export default function DietChart({ logs }) {
   if (!logs) return null
@@ -31,45 +30,46 @@ export default function DietChart({ logs }) {
     <div className="diet-wrapper">
       <div className="chart">
         <ResponsiveContainer>
-          <LineChart syncId="diet" data={logs} margin={chartMarginStyle}>
+          <LineChart syncId="diet" data={logs} margin={chartMargin}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
+            <XAxis dataKey="date" tickMargin={xTickMargin} />
             <Tooltip />
             <Legend />
             <YAxis
               dataKey="calories"
-              yAxisId="left"
+              yAxisId="calories"
+              orientation="right"
               stroke="#8884d8"
               domain={['dataMin - 1000', 'dataMax + 10']}
             />
             <YAxis
               dataKey="fat"
-              yAxisId="right"
-              orientation="right"
-              stroke="#82ca9d"
+              yAxisId="fat"
+              orientation="left"
+              stroke="#ffc658"
               domain={[0, 'dataMax + 20']}
             />
             <Line
               type="monotone"
-              yAxisId="right"
+              yAxisId="fat"
               dataKey="fat"
               stroke="#ffc658"
             />
             <Line
               type="monotone"
-              yAxisId="right"
+              yAxisId="fat"
               dataKey="carbs"
               stroke="#82ca9d"
             />
             <Line
               type="monotone"
-              yAxisId="right"
+              yAxisId="fat"
               dataKey="protien"
               stroke="#ff7300"
             />
             <Line
               type="monotone"
-              yAxisId="left"
+              yAxisId="calories"
               dataKey="calories"
               stroke="#8884d8"
             />
@@ -78,15 +78,14 @@ export default function DietChart({ logs }) {
       </div>
       <div className="chart">
         <ResponsiveContainer>
-          <LineChart syncId="diet" data={logs} margin={chartMarginStyle}>
+          <AreaChart syncId="diet" data={logs} margin={chartMargin}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
+            <XAxis dataKey="date" tickMargin={xTickMargin} />
             <Tooltip />
             <Legend />
             <YAxis domain={['dataMin - 5', 'dataMax + 7']} />
-
-            <Line type="monotone" dataKey="weight" />
-          </LineChart>
+            <Area type="monotone" dataKey="weight" />
+          </AreaChart>
         </ResponsiveContainer>
       </div>
     </div>
