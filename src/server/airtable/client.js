@@ -1,14 +1,13 @@
 'use strict'
 
-const Airtable = require('airtable')
+const { Client } = require('@kyeotic/airtable')
 
 module.exports = {
   configure
 }
 
 function configure({ config }) {
-  Airtable.configure({
+  return new Client({
     apiKey: config.apiKey
   })
-  return Airtable
 }

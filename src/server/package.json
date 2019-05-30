@@ -9,8 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "airtable": "^0.5.10",
-    "dayjs": "^1.8.13",
+    "@kyeotic/airtable": "^0.1.0",
+    "dateformat": "^3.0.3",
     "define-lazy-prop": "^2.0.0",
     "lambda-router": "^2.4.0"
   },

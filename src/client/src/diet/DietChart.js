@@ -1,6 +1,6 @@
 import React from 'react'
 import { map, evolve, sortBy, prop, pipe } from 'ramda'
-import dayjs from 'dayjs'
+import dateformat from 'dateformat'
 import {
   AreaChart,
   LineChart,
@@ -17,7 +17,7 @@ import './dietChart.css'
 
 const chartTransform = pipe(
   sortBy(prop('date')),
-  map(evolve({ date: d => dayjs(d).format('MM/DD') }))
+  map(evolve({ date: d => dateformat(d, 'MM/DD') }))
 )
 
 const chartMargin = { top: 5, right: 0, bottom: 5, left: 0 }

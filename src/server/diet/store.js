@@ -1,7 +1,7 @@
 'use strict'
 
 const { BaseStore } = require('../airtable/baseStore')
-const dayjs = require('dayjs')
+const dateformat = require('dateformat')
 
 class DietStore extends BaseStore {
   constructor({ baseId, tableName, airtable }) {
@@ -24,7 +24,7 @@ class DietStore extends BaseStore {
 
   toDb(record) {
     return super.toDb({
-      Date: dayjs(record.date).format('YYYY-MM-DD'),
+      Date: dateformat(record.date, 'YYYY-MM-DD'),
       Weight: record.weight,
       Fat: record.fat,
       Protien: record.protien,

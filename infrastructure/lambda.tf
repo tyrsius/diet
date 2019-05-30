@@ -6,7 +6,7 @@ resource "aws_lambda_function" "api" {
   timeout          = 30
   memory_size      = 512
   role             = "${aws_iam_role.lambda_execution_role.arn}"
-  runtime          = "nodejs8.10"
+  runtime          = "nodejs10.x"
   source_code_hash = "${base64sha256(file(local.api_lambda_file))}"
   tags             = "${local.default_tags}"
 
