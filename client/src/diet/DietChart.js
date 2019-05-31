@@ -36,43 +36,29 @@ export default function DietChart({ logs }) {
             <Tooltip />
             <Legend />
             <YAxis
-              dataKey="calories"
-              yAxisId="calories"
-              orientation="right"
-              stroke="#8884d8"
-              domain={['dataMin - 1000', 'dataMax + 10']}
-            />
-            <YAxis
               dataKey="fat"
-              yAxisId="fat"
-              orientation="left"
               stroke="#ffc658"
               domain={[0, 'dataMax + 20']}
             />
-            <Line
-              type="monotone"
-              yAxisId="fat"
-              dataKey="fat"
-              stroke="#ffc658"
-            />
-            <Line
-              type="monotone"
-              yAxisId="fat"
-              dataKey="carbs"
-              stroke="#82ca9d"
-            />
-            <Line
-              type="monotone"
-              yAxisId="fat"
-              dataKey="protien"
-              stroke="#ff7300"
-            />
-            <Line
-              type="monotone"
-              yAxisId="calories"
+            <Line type="monotone" dataKey="fat" stroke="#ffc658" />
+            <Line type="monotone" dataKey="carbs" stroke="#82ca9d" />
+            <Line type="monotone" dataKey="protien" stroke="#ff7300" />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+      <div className="chart">
+        <ResponsiveContainer>
+          <LineChart syncId="diet" data={logs} margin={chartMargin}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" tickMargin={xTickMargin} />
+            <Tooltip />
+            <Legend />
+            <YAxis
               dataKey="calories"
               stroke="#8884d8"
+              domain={['dataMin - 500', 'dataMax + 200']}
             />
+            <Line type="monotone" dataKey="calories" stroke="#8884d8" />
           </LineChart>
         </ResponsiveContainer>
       </div>
