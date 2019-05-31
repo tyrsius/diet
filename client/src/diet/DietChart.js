@@ -17,7 +17,7 @@ import './dietChart.css'
 
 const chartTransform = pipe(
   sortBy(prop('date')),
-  map(evolve({ date: d => dateformat(d, 'MM/DD') }))
+  map(evolve({ date: d => dateformat(d, 'mm/dd') }))
 )
 
 const chartMargin = { top: 5, right: 0, bottom: 5, left: 0 }
