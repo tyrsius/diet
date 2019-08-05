@@ -30,6 +30,18 @@ export default function DietChart({ logs }) {
     <div className="diet-wrapper">
       <div className="chart">
         <ResponsiveContainer>
+          <AreaChart syncId="diet" data={logs} margin={chartMargin}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" tickMargin={xTickMargin} />
+            <Tooltip />
+            <Legend />
+            <YAxis domain={['dataMin - 5', 'dataMax + 7']} />
+            <Area type="monotone" dataKey="weight" />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+      {/* <div className="chart">
+        <ResponsiveContainer>
           <LineChart syncId="diet" data={logs} margin={chartMargin}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="date" tickMargin={xTickMargin} />
@@ -61,19 +73,7 @@ export default function DietChart({ logs }) {
             <Line type="monotone" dataKey="calories" stroke="#8884d8" />
           </LineChart>
         </ResponsiveContainer>
-      </div>
-      <div className="chart">
-        <ResponsiveContainer>
-          <AreaChart syncId="diet" data={logs} margin={chartMargin}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" tickMargin={xTickMargin} />
-            <Tooltip />
-            <Legend />
-            <YAxis domain={['dataMin - 5', 'dataMax + 7']} />
-            <Area type="monotone" dataKey="weight" />
-          </AreaChart>
-        </ResponsiveContainer>
-      </div>
+      </div> */}
     </div>
   )
 }
