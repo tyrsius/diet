@@ -14,6 +14,7 @@
     "dateformat": "^3.0.3",
     "deepmerge": "^4.2.2",
     "define-lazy-prop": "^2.0.0",
+    "graphql": "^14.5.8",
     "graphql-iso-date": "^3.6.1",
     "graphql-type-json": "^0.3.1"
   },
