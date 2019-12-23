@@ -1,13 +1,22 @@
-import urlJoin from 'url-join'
-
 import { request } from '../http/client'
-import config from '../config.js'
 
-const api = (...parts) => urlJoin(config.apiHost, 'v1', ...parts)
+const dietQuery = `
+query {
+  dietLogs{
+    id
+    date
+    fat
+    weight
+    protein
+    carbs
+    calories
+  }
+}
+`
 
 export const getDietLogs = async () => {
-  let items = await request(api('dietlogs'))
-  return items.map(fromApi)
+  let response = await request({ query: dietQuery })
+  return response.data.dietLogs.map(fromApi)
 }
 
 function fromApi(item) {

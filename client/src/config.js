@@ -1,3 +1,4 @@
 export default {
-  apiHost: 'https://diet-api.kye.dev'
+  apiHost: 'https://api-diet.kye.dev',
+  gqlEndpoint: '/v1/graphql'
 }

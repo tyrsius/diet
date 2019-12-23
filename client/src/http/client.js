@@ -1,10 +1,18 @@
-export async function request(url, options = {}) {
-  let response = await fetch(url, {
-    ...options,
+import urlJoin from 'url-join'
+import config from '../config.js'
+
+const host = urlJoin(config.apiHost, config.gqlEndpoint)
+
+export async function request({ query, operationName = null } = {}) {
+  let response = await fetch(host, {
+    method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
-      ...options.headers
-    }
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      operationName,
+      query
+    })
   })
   if (!response.ok) {
     let error = `Request Failure ${response.statusCode}`
