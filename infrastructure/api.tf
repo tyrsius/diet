@@ -66,14 +66,13 @@ resource "aws_api_gateway_deployment" "apig_deployment" {
   depends_on = [aws_api_gateway_integration.gql]
 
   rest_api_id = aws_api_gateway_rest_api.api.id
-  stage_name  = local.api_stage
+  stage_name  = terraform.workspace
 
   # This is important, it will cause the stage to get deployed if this file is changed.
   # If it is not present the stage will not get updated even on dependent apig resource changes.
   stage_description = filebase64sha256(var.apiGatewayTerraformFile)
 
   variables = {
-    "stage"   = local.api_stage
     "depends" = aws_api_gateway_integration.gql.id
   }
 

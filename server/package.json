@@ -4,15 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "lambda-zipper build -f airtable diet api.js config.js context.js -r -o ../build/server.zip"
+    "build": "lambda-zipper build -f airtable diet *.js -r -o ../build/server.zip"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@kyeotic/airtable": "^0.1.0",
+    "apollo-server-lambda": "^2.9.14",
     "dateformat": "^3.0.3",
+    "deepmerge": "^4.2.2",
     "define-lazy-prop": "^2.0.0",
-    "lambda-router": "^2.4.0"
+    "graphql-iso-date": "^3.6.1",
+    "graphql-type-json": "^0.3.1"
   },
   "devDependencies": {
     "dotenv": "^7.0.0",

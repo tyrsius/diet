@@ -1,5 +1,5 @@
 data "aws_route53_zone" "domain" {
-  name = "${hosted_zone_name}."
+  name = "${local.hosted_zone_name}."
 }
 
 provider "aws" {
@@ -49,6 +49,7 @@ resource "aws_route53_record" "api" {
 resource "aws_api_gateway_domain_name" "api_domain" {
   domain_name     = local.api_domain
   certificate_arn = module.cert.arn
+  security_policy = "TLS_1_2"
 }
 
 output "domain" {

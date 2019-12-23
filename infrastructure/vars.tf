@@ -6,6 +6,10 @@ variable api_lambda_file {
   default = "../build/server.zip"
 }
 
-variable app_namespace {}
-variable site_domain {}
-variable api_domain {}
+variable APP_NAMESPACE {}
+variable SITE_DOMAIN {}
+variable API_DOMAIN {
+  default = ""
+}
+variable AIRTABLE_KEY {}
+variable AIRTABLE_DIET_BASE_ID {}

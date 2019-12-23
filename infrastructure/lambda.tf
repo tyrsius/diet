@@ -1,14 +1,14 @@
 #Lambda function
 resource "aws_lambda_function" "api" {
-  filename         = local.api_lambda_file
-  function_name    = local.api_lamba_name
+  filename         = var.api_lambda_file
+  function_name    = local.api_lambda_name
   handler          = "api.handler"
   timeout          = 30
   memory_size      = 512
-  role             = aws_iam_role.lambda_execution_role.arn
+  role             = aws_iam_role.lambda_execution.arn
   runtime          = "nodejs10.x"
-  source_code_hash = filebase64sha256(local.api_lambda_file)
-  tags             = local.default_tags
+  source_code_hash = filebase64sha256(var.api_lambda_file)
+  tags             = local.tags
 
   environment {
     variables = {
@@ -18,75 +18,50 @@ resource "aws_lambda_function" "api" {
   }
 }
 
-#Role the lambda will be executed with
-resource "aws_iam_role" "lambda_execution_role" {
-  name = "${local.app_namespace}_LambdaRole"
+resource "aws_iam_role" "lambda_execution" {
+  name               = local.lambda_role_name
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume.json
+}
 
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
-      },
-      "Effect": "Allow"
+data "aws_iam_policy_document" "lambda_assume" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+    principals {
+      type = "Service"
+      identifiers = [
+        "lambda.amazonaws.com",
+      ]
     }
-  ]
-}
-EOF
-
+  }
 }
 
-#Allow lambda to create cloudwatch log events, equvilant to AWSLambdaBasicExecutionRole
-resource "aws_iam_role_policy" "lambda_basic_execution" {
-  name = "lambda_basic_execution"
-  role = aws_iam_role.lambda_execution_role.id
-
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "logs:CreateLogGroup",
-        "logs:CreateLogStream",
-        "logs:PutLogEvents"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "lambda:GetFunctionConfiguration",
-        "lambda:InvokeAsync",
-        "lambda:InvokeFunction",
-        "lambda:Invoke"
-      ],
-      "Resource": "arn:aws:lambda:${var.region}:${data.aws_caller_identity.current.account_id}:function:${local.app_namespace}*"
-    },
-    {
-        "Sid": "AllowAccessToOwnTables",
-        "Effect": "Allow",
-        "Resource": [
-            "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/${local.app_namespace}*"
-        ],
-        "Action": [
-            "dynamodb:GetItem",
-            "dynamodb:BatchGetItem",
-            "dynamodb:Query",
-            "dynamodb:Scan",
-            "dynamodb:PutItem",
-            "dynamodb:UpdateItem",
-            "dynamodb:DeleteItem",
-            "dynamodb:BatchWriteItem"
-        ]
-    }
-  ]
-}
-EOF
-
+resource "aws_iam_role_policy" "lambda_execution" {
+  name   = "lambda_execution"
+  role   = aws_iam_role.lambda_execution.id
+  policy = data.aws_iam_policy_document.lambda_execution.json
 }
 
+data "aws_iam_policy_document" "lambda_execution" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = ["*"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "lambda:GetFunctionConfiguration",
+      "lambda:InvokeAsync",
+      "lambda:InvokeFunction"
+    ]
+    resources = [
+      "arn:aws:lambda:*:${local.account_id}:function:${local.api_lambda_name}*",
+      "arn:aws:sts::${local.account_id}:assumed-role/${aws_iam_role.lambda_execution.name}/${local.api_lambda_name}"
+    ]
+  }
+}

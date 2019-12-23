@@ -18,18 +18,9 @@ help:
 	@perl -e '$(HELP_FUNC)' $(MAKEFILE_LIST)
 
 server: ## Deploy the Server
-	cd server && \
-		npm run build
-	cd infrastructure && \
-		terraform init && \
-		cp ../.env ./terraform.tfvars && \
-		terraform apply -auto-approve && \
-		rm ./terraform.tfvars
+	./scripts/server.sh
 
 client: ## Deploy the Client
-	cd client && \
-		npm run build && \
-		aws s3 sync build s3://diet.kye.dev && \
-		aws s3 cp build/index.html s3://diet.kye.dev/index.html --cache-control max-age=0
+	./scripts/client.sh
 
 all: server client ## Deploy everything
