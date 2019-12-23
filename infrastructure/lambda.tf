@@ -1,19 +1,19 @@
 #Lambda function
 resource "aws_lambda_function" "api" {
-  filename         = "${local.api_lambda_file}"
-  function_name    = "${local.api_lamba_name}"
+  filename         = local.api_lambda_file
+  function_name    = local.api_lamba_name
   handler          = "api.handler"
   timeout          = 30
   memory_size      = 512
-  role             = "${aws_iam_role.lambda_execution_role.arn}"
+  role             = aws_iam_role.lambda_execution_role.arn
   runtime          = "nodejs10.x"
-  source_code_hash = "${base64sha256(file(local.api_lambda_file))}"
-  tags             = "${local.default_tags}"
+  source_code_hash = filebase64sha256(local.api_lambda_file)
+  tags             = local.default_tags
 
   environment {
-    variables {
-      AIRTABLE_KEY          = "${var.AIRTABLE_KEY}"
-      AIRTABLE_DIET_BASE_ID = "${var.AIRTABLE_DIET_BASE_ID}"
+    variables = {
+      AIRTABLE_KEY          = var.AIRTABLE_KEY
+      AIRTABLE_DIET_BASE_ID = var.AIRTABLE_DIET_BASE_ID
     }
   }
 }
@@ -36,12 +36,13 @@ resource "aws_iam_role" "lambda_execution_role" {
   ]
 }
 EOF
+
 }
 
 #Allow lambda to create cloudwatch log events, equvilant to AWSLambdaBasicExecutionRole
 resource "aws_iam_role_policy" "lambda_basic_execution" {
   name = "lambda_basic_execution"
-  role = "${aws_iam_role.lambda_execution_role.id}"
+  role = aws_iam_role.lambda_execution_role.id
 
   policy = <<EOF
 {
@@ -86,4 +87,6 @@ resource "aws_iam_role_policy" "lambda_basic_execution" {
   ]
 }
 EOF
+
 }
+

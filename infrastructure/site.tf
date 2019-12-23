@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "site" {
-  bucket = "${local.site_domain}"
+  bucket = local.site_domain
   acl    = "private"
 
   policy = <<EOF
@@ -20,6 +20,7 @@ resource "aws_s3_bucket" "site" {
     }
 EOF
 
+
   website {
     index_document = "index.html"
     error_document = "error.html"
@@ -31,10 +32,10 @@ resource "aws_cloudfront_distribution" "site" {
   is_ipv6_enabled = true
   price_class     = "PriceClass_100"
 
-  "origin" {
+  origin {
     origin_id = "origin-bucket-${aws_s3_bucket.site.id}"
 
-    domain_name = "${aws_s3_bucket.site.website_endpoint}"
+    domain_name = aws_s3_bucket.site.website_endpoint
 
     # domain_name = "${local.site_domain}.s3.amazonaws.com"
 
@@ -64,7 +65,7 @@ resource "aws_cloudfront_distribution" "site" {
     allowed_methods = ["GET", "HEAD", "DELETE", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods  = ["GET", "HEAD"]
 
-    "forwarded_values" {
+    forwarded_values {
       query_string = "true"
 
       cookies {
@@ -104,25 +105,38 @@ resource "aws_cloudfront_distribution" "site" {
     compress               = true
   }
 
-  "viewer_certificate" {
-    acm_certificate_arn      = "${module.cert.arn}"
+  viewer_certificate {
+    acm_certificate_arn      = module.cert.arn
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1"
   }
 
-  
+  # TF-UPGRADE-TODO: In Terraform v0.10 and earlier, it was sometimes necessary to
+  # force an interpolation expression to be interpreted as a list by wrapping it
+  # in an extra set of list brackets. That form was supported for compatibility in
+  # v0.11, but is no longer supported in Terraform v0.12.
+  #
+  # If the expression in the following list itself returns a list, remove the
+  # brackets to avoid interpretation as a list of lists. If the expression
+  # returns a single list item then leave it as-is and remove this TODO comment.
+  aliases = [local.cloufront_domains]
 
-  aliases = ["${local.cloufront_domains}"]
-
-  restrictions = {
-    geo_restriction = {
+  restrictions {
+    geo_restriction {
       restriction_type = "none"
     }
   }
 }
 
 locals {
-  api_domain_host = "${replace(
-    replace(aws_api_gateway_deployment.apig_deployment.invoke_url, "/${local.api_stage}", ""),
-    "https://", "")}"
+  api_domain_host = replace(
+    replace(
+      aws_api_gateway_deployment.apig_deployment.invoke_url,
+      "/${local.api_stage}",
+      "",
+    ),
+    "https://",
+    "",
+  )
 }
+
