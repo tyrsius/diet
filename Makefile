@@ -24,3 +24,6 @@ client: ## Deploy the Client
 	./scripts/client.sh
 
 all: server client ## Deploy everything
+
+destroy:
+	./scripts/destroy.sh

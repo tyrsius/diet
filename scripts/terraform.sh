@@ -33,6 +33,12 @@ function terraform_apply () {
   rm "${_dir}/../infrastructure/terraform.tfvars"
 }
 
+function terraform_destroy () {
+  cp "${_dir}/../.env" "${_dir}/../infrastructure/terraform.tfvars"
+  terraform destroy
+  rm "${_dir}/../infrastructure/terraform.tfvars"
+}
+
 function terraform_plan () {
   cp "${_dir}/../.env" "${_dir}/../infrastructure/terraform.tfvars"
   terraform plan
