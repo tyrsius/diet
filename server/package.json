@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@kyeotic/airtable": "^0.1.0",
-    "apollo-server-lambda": "^2.9.14",
+    "apollo-server-lambda": "^2.14.2",
     "dateformat": "^3.0.3",
     "deepmerge": "^4.2.2",
     "define-lazy-prop": "^2.0.0",
